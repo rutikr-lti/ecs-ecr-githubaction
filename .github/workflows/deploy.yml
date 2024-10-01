@@ -36,6 +36,10 @@ jobs:
         run: |
           aws ecs register-task-definition --cli-input-json file://task-definition.json
 
+      - name: Build project with Maven
+        run: mvn -B package --file pom.xml
+
+
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
