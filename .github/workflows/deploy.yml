@@ -36,13 +36,22 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+      - name: create cluster.
+        run: |
+          aws ecs create-cluster --cluster-name mycluster2
+      - name: create task defination family
+        env:
+          PATH: task-definition.json
+        run: |
+          aws ecs register-task-definition --cli-input-json file://$PATH
+        
       - name: Deploy to ECS
         env:
           AWS_REGION: ap-south-1
-          ECS_CLUSTER: mycluster1
-          ECS_SERVICE: my-service
-          ECS_TASK_DEFINITION: my-task
-          CONTAINER_NAME: my-container
+          ECS_CLUSTER: mycluster2
+          ECS_SERVICE: latest-service
+          ECS_TASK_DEFINITION: latest-task
+          CONTAINER_NAME: my-container2
           IMAGE_TAG: ${{ github.sha }}
           COUNT: 1
         run: |
