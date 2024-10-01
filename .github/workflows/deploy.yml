@@ -13,22 +13,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-     # - name: Install AWS CLI
-       # uses: aws-actions/setup-aws-cli@v1
-
-      - name: Verify AWS CLI Installation
-        run: aws --version
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+          aws-region: us-west-2
 
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install --update
+
+      - name: Verify AWS CLI Installation
+        run: aws --version
+
+      - name: create cluster.
+        run: |
+          aws ecs create-cluster --cluster-name mycluster2
       - name: Create Task Definition
         run: |
-          cat task-definition.json | aws ecs register-task-definition --cli-input-json file://-
+          aws ecs register-task-definition --cli-input-json file://task-definition.json
 
       - name: Log in to Amazon ECR
         id: login-ecr
