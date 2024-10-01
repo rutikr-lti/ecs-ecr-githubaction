@@ -48,10 +48,12 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: my-data
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: "latest"
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
       - name: Create ECS Service
         env:
@@ -62,7 +64,7 @@ jobs:
           COUNT: 1
           FARGATE: FARGATE
         run: |
-          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
+          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE
           # aws ecs create-service \
            # --cluster $ECS_CLUSTER \
             # --service-name $ECS_SERVICE \
