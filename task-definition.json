@@ -1,9 +1,9 @@
 {
-  "family": "latest-task",
+  "family": "latest-task-1",
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
-      "name": "my-container2",
+      "name": "my-container3",
       "image": "039612874025.dkr.ecr.ap-south-1.amazonaws.com/my-data:latest",
       "essential": true,
       "memory": 512,
