@@ -31,7 +31,7 @@ jobs:
 
       - name: create cluster.
         run: |
-          aws ecs create-cluster --cluster-name mycluster2
+          aws ecs create-cluster --cluster-name mycluster3
       - name: Create Task Definition
         run: |
           aws ecs register-task-definition --cli-input-json file://task-definition.json
@@ -58,17 +58,17 @@ jobs:
       - name: Create ECS Service
         env:
           AWS_REGION: ap-south-1
-          ECS_CLUSTER: mycluster2
-          ECS_SERVICE: new-service-latest
-          ECS_TASK_DEFINITION: latest-task
+          ECS_CLUSTER: mycluster3
+          ECS_SERVICE: new-service-latest3
+          ECS_TASK_DEFINITION: latest-task-1
           COUNT: 1
           FARGATE: FARGATE
         run: |
-          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment 
-          # aws ecs create-service \
-           # --cluster $ECS_CLUSTER \
-            # --service-name $ECS_SERVICE \
-            # --task-definition $ECS_TASK_DEFINITION \
-            # --desired-count $COUNT \
-            # --launch-type $FARGATE \
-            # --network-configuration "awsvpcConfiguration={subnets=[subnet-0ca77c1ad6ba4fb07],securityGroups=[sg-029eb7b59b83a8275],assignPublicIp=ENABLED}"
+          # aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment 
+           aws ecs create-service \
+            --cluster $ECS_CLUSTER \
+            --service-name $ECS_SERVICE \
+            --task-definition $ECS_TASK_DEFINITION \
+            --desired-count $COUNT \
+            --launch-type $FARGATE \
+            --network-configuration "awsvpcConfiguration={subnets=[subnet-0ca77c1ad6ba4fb07],securityGroups=[sg-029eb7b59b83a8275],assignPublicIp=ENABLED}"
