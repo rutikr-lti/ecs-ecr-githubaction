@@ -31,7 +31,7 @@ jobs:
 
       - name: create cluster.
         run: |
-          aws ecs create-cluster --cluster-name mycluster3
+          aws ecs create-cluster --cluster-name ms3cluster
       - name: Create Task Definition
         run: |
           aws ecs register-task-definition --cli-input-json file://task-definition.json
@@ -58,9 +58,9 @@ jobs:
       - name: Create ECS Service
         env:
           AWS_REGION: ap-south-1
-          ECS_CLUSTER: mycluster3
-          ECS_SERVICE: new-service-latest3
-          ECS_TASK_DEFINITION: latest-task-1
+          ECS_CLUSTER: ms3cluster
+          ECS_SERVICE: new-service-ms3
+          ECS_TASK_DEFINITION: ms-task1
           COUNT: 1
           FARGATE: FARGATE
         run: |
